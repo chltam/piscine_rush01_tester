@@ -5,7 +5,6 @@ Grid::Grid(std::string views)
 	readMatrixFromInput();
 
 	viewsStr_ = views;
-	error_ = false;
 }
 
 void	Grid::readMatrixFromInput()
@@ -20,7 +19,7 @@ void	Grid::readMatrixFromInput()
 void	Grid::format_check()
 {
 	// KO on empty output
-	if (outputStr_.empty())
+	if (outputStr_.empty() || outputStr_ == "\n")
 		exitMessage("KO!");
 	
 	// parse view into vector vector
@@ -34,12 +33,34 @@ void	Grid::format_check()
 	// check for duplicated value
 	if (parseOutput() == -1)
 		exitMessage("KO!");
+	
+	
 	//printing test
 	for (int n = 0; n < pov_.size(); n++){
 		for (int i = 0; i < pov_[n].size(); i++){
 			std::cout << pov_[n][i] << std::endl;
 		}
 		std::cout << "------" << n << "-------\n";
+	}
+	for (int n = 0; n < row_.size(); n++){
+		for (int i = 0; i < row_[n].size(); i++){
+			
+			std::cout << row_[n][i];
+			if (i != row_[n].size() - 1)
+				std::cout << " ";
+		}
+		std::endl(std::cout);
+		// std::cout << "------" << n << "-------\n";
+	}
+	for (int n = 0; n < column_.size(); n++){
+		for (int i = 0; i < column_[n].size(); i++){
+			
+			std::cout << column_[n][i];
+			if (i != column_[n].size() - 1)
+				std::cout << " ";
+		}
+		std::endl(std::cout);
+		// std::cout << "------" << n << "-------\n";
 	}
 }
 
@@ -74,14 +95,51 @@ int	Grid::parseViews()
 
 int	Grid::parseOutput()
 {
+	std::string	line;
+	std::istringstream	line_iss(outputStr_);
 	
+	// setup row vector
+	while (std::getline(line_iss, line))
+	{
+		std::istringstream	iss(line);
+		std::vector<int>	temp;
+		int	number;
+
+		while (iss >> number)
+			temp.push_back(number);
+		if (iss.fail() && !iss.eof())
+			return (-1);
+		row_.push_back(temp);
+	}
+
+	// check output size
+	if (row_.size() != size_)
+		return (-1);
+	for (int n = 0; n < row_.size(); n++){
+		if (row_[n].size() != size_)
+			return (-1);
+	}
+	
+	// setup column vector
+	for (int n = 0; n < size_; n++){
+		std::vector<int>	temp;
+		
+		for (int i = 0; i < row_.size(); i++){
+			temp.push_back(row_[i][n]);
+		}
+		column_.push_back(temp);
+	}
+	return (0);
 }
 
-const std::string&	Grid::get_outputStr(){
-	return (outputStr_);
+void	Grid::logic_check()
+{
+	if (duplicateCheck() == -1)
+		exitMessage("KO!");
 }
 
-bool	Grid::has_error(){
-	return (error_);
+int	Grid::duplicateCheck()
+{
+	
+	return (0);
 }
-

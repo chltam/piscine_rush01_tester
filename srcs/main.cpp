@@ -9,5 +9,6 @@ int main(int argc, char** argv)
 	Grid	grid((std::string(argv[1])));
 	
 	grid.format_check();
+	grid.logic_check();
 	return (0);
 }
