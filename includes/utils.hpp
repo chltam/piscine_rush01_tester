@@ -1,8 +1,9 @@
 #pragma once
 
 #include <iostream>
+#include <sstream>
 #include <cstdlib>
 #include <string>
 #include <vector>
 
-std::string	readMatrixFromInput();
+void	exitMessage(std::string str);

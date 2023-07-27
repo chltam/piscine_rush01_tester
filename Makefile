@@ -4,7 +4,7 @@ CXX := c++
 
 CXXFLAGS :=  -g #-Wall -Wextra -Werror
 
-SRCS := main.cpp Grid.cpp
+SRCS := main.cpp Grid.cpp utils.cpp
 
 SRCDIR = ./srcs
 
