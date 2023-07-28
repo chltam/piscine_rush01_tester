@@ -2,6 +2,8 @@
 #define _GRID_H_
 
 #include "../includes/utils.hpp"
+#include <set>
+#include <unordered_set>
 
 class Grid{
 
@@ -32,6 +34,8 @@ private:
 	int		parseViews();
 	int		parseOutput();
 	int		duplicateCheck();
+	int		rowCheck();
+	int		columnCheck();
 
 };
 

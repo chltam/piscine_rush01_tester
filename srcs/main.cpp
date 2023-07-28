@@ -10,5 +10,7 @@ int main(int argc, char** argv)
 	
 	grid.format_check();
 	grid.logic_check();
+	exitMessage("OK!");
+
 	return (0);
 }

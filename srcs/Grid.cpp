@@ -36,32 +36,32 @@ void	Grid::format_check()
 	
 	
 	//printing test
-	for (int n = 0; n < pov_.size(); n++){
-		for (int i = 0; i < pov_[n].size(); i++){
-			std::cout << pov_[n][i] << std::endl;
-		}
-		std::cout << "------" << n << "-------\n";
-	}
-	for (int n = 0; n < row_.size(); n++){
-		for (int i = 0; i < row_[n].size(); i++){
+	// for (int n = 0; n < pov_.size(); n++){
+	// 	for (int i = 0; i < pov_[n].size(); i++){
+	// 		std::cout << pov_[n][i] << std::endl;
+	// 	}
+	// 	std::cout << "------" << n << "-------\n";
+	// }
+	// for (int n = 0; n < row_.size(); n++){
+	// 	for (int i = 0; i < row_[n].size(); i++){
 			
-			std::cout << row_[n][i];
-			if (i != row_[n].size() - 1)
-				std::cout << " ";
-		}
-		std::endl(std::cout);
-		// std::cout << "------" << n << "-------\n";
-	}
-	for (int n = 0; n < column_.size(); n++){
-		for (int i = 0; i < column_[n].size(); i++){
+	// 		std::cout << row_[n][i];
+	// 		if (i != row_[n].size() - 1)
+	// 			std::cout << " ";
+	// 	}
+	// 	std::endl(std::cout);
+	// 	// std::cout << "------" << n << "-------\n";
+	// }
+	// for (int n = 0; n < column_.size(); n++){
+	// 	for (int i = 0; i < column_[n].size(); i++){
 			
-			std::cout << column_[n][i];
-			if (i != column_[n].size() - 1)
-				std::cout << " ";
-		}
-		std::endl(std::cout);
-		// std::cout << "------" << n << "-------\n";
-	}
+	// 		std::cout << column_[n][i];
+	// 		if (i != column_[n].size() - 1)
+	// 			std::cout << " ";
+	// 	}
+	// 	std::endl(std::cout);
+	// 	// std::cout << "------" << n << "-------\n";
+	// }
 }
 
 int	Grid::parseViews()
@@ -87,6 +87,8 @@ int	Grid::parseViews()
 		pov_.push_back(temp_vec);
 		
 		for (int start = n * size_, end = start + size_; start < end; start++){
+			if (viewVec[start] < 1 || viewVec[start] > size_)
+				return (-1);
 			pov_[n].push_back(viewVec[start]);
 		}
 	}
@@ -136,10 +138,104 @@ void	Grid::logic_check()
 {
 	if (duplicateCheck() == -1)
 		exitMessage("KO!");
+	if (rowCheck() == 1)
+		exitMessage("KO!");
+	if (columnCheck() == -1)
+		exitMessage("KO!");
 }
 
 int	Grid::duplicateCheck()
 {
+	std::unordered_set<int> unique_number;
+    
+	for (int n = 0; n < row_.size(); n++){
+		for (int number : row_[n]){
+			if (number < 1 || number > size_)
+				return (-1);
+			if (unique_number.find(number) != unique_number.end())
+				return (-1);
+			unique_number.insert(number);
+		}
+		unique_number.clear();
+    }
 	
+	for (int n = 0; n < column_.size(); n++){
+		for (int number : column_[n]){
+			if (number < 1 || number > size_)
+				return (-1);
+			if (unique_number.find(number) != unique_number.end())
+				return (-1);
+			unique_number.insert(number);
+		}
+		unique_number.clear();
+    }
+	return (0);
+}
+
+int	Grid::rowCheck()
+{
+	int	max;
+	int	view;
+
+	for (int n = 0; n < row_.size(); n++){
+		int	left = pov_[2][n];
+		int	right = pov_[3][n];
+		max = 0;
+		view = 0;
+	
+		for (auto it = row_[n].begin(); it != row_[n].end(); it++){
+			if (*it > max){
+				view++;
+				max = *it;
+			}
+		}
+		if (view != left)
+			return (-1);
+		
+		max = 0;
+		view = 0;
+		for (auto it = row_[n].rbegin(); it != row_[n].rend(); it++){
+			if (*it > max){
+				view++;
+				max = *it;
+			}
+		}
+		if (view != right)
+			return (-1);
+	}
+	return (0);
+}
+
+int Grid::columnCheck()
+{
+	int	max;
+	int	view;
+
+	for (int n = 0; n < column_.size(); n++){
+		int	top = pov_[0][n];
+		int	bot = pov_[1][n];
+		max = 0;
+		view = 0;
+	
+		for (auto it = column_[n].begin(); it != column_[n].end(); it++){
+			if (*it > max){
+				view++;
+				max = *it;
+			}
+		}
+		if (view != top)
+			return (-1);
+		
+		max = 0;
+		view = 0;
+		for (auto it = column_[n].rbegin(); it != column_[n].rend(); it++){
+			if (*it > max){
+				view++;
+				max = *it;
+			}
+		}
+		if (view != bot)
+			return (-1);
+	}
 	return (0);
 }
